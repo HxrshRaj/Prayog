@@ -1,0 +1,30 @@
+:root {
+  --bg: #fafaf9; --fg: #1c1917; --muted: #78716c; --card: #fff; --line: #e7e5e4;
+  --ok: #15803d; --warn: #b45309; --bad: #b91c1c; --accent: #2563eb;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #0c0a09; --fg: #f5f5f4; --muted: #a8a29e; --card: #1c1917; --line: #292524; --accent: #60a5fa;
+    --ok: #4ade80; --warn: #fbbf24; --bad: #f87171; }
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--fg); font: 16px/1.55 system-ui, sans-serif; }
+nav { display: flex; gap: 20px; padding: 14px 16px; border-bottom: 1px solid var(--line); flex-wrap: wrap; }
+nav a, a { color: var(--accent); text-decoration: none; }
+main { max-width: 960px; margin: 0 auto; padding: 16px; }
+h1 small, h4 small { font-weight: 400; font-size: 0.55em; color: var(--muted); display: block; }
+.lede, .muted { color: var(--muted); }
+.err { color: var(--bad); }
+.grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 14px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 10px; padding: 14px; color: inherit; display: block; }
+.card h3 { margin: 8px 0 4px; }
+.pill { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 13px; border: 1px solid currentColor; }
+.pill.ok { color: var(--ok); } .pill.warn { color: var(--warn); } .pill.bad { color: var(--bad); } .pill.muted { color: var(--muted); }
+.scroll { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; font-size: 14px; }
+th, td { text-align: left; padding: 6px 10px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+input, textarea { width: 100%; padding: 8px; border: 1px solid var(--line); border-radius: 6px; background: var(--card); color: var(--fg); font: inherit; margin: 8px 0; }
+button { background: var(--accent); color: #fff; border: 0; padding: 8px 18px; border-radius: 6px; font: inherit; cursor: pointer; }
+button:disabled { opacity: 0.5; }
+.charts { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 16px; }
+code { background: var(--line); padding: 1px 5px; border-radius: 4px; font-size: 0.9em; }
+section { margin: 20px 0; }

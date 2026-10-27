@@ -1,0 +1,44 @@
+name: ci
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip }
+      - run: pip install -r requirements.txt
+      - run: python -m pytest tests -q
+      - run: python -m pytest backend/tests -q
+      - run: python -m pytest gpu -q   # skipped automatically without a CUDA GPU
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults: { run: { working-directory: frontend } }
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with: { node-version: 22, cache: npm, cache-dependency-path: frontend/package-lock.json }
+      - run: npm ci --no-audit --no-fund
+      - run: npm test
+      - run: npm run build
+
+  smoke:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        experiment: [lora_vs_full, distillation, dpo, rl_ppo]
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.11", cache: pip }
+      - uses: actions/cache@v4
+        with: { path: ~/.cache/huggingface, key: "hf-${{ matrix.experiment }}" }
+      - run: pip install -r requirements.txt
+      - name: 1-step CPU smoke run
+        run: python experiments/${{ matrix.experiment }}/run.py --smoke

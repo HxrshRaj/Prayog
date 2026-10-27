@@ -1,0 +1,19 @@
+teacher: distilbert-base-uncased-finetuned-sst-2-english
+student: prajjwal1/bert-tiny
+student_tokenizer: prajjwal1/bert-tiny
+dataset: glue/sst2
+n_train: 1000          # labelled budget given to both student arms
+n_val: 872
+max_len: 64
+batch_size: 32
+epochs: 6
+lr: 1.0e-3
+alpha: 0.7             # weight on the soft-target term
+temperatures: [1, 2, 4, 8]
+seeds: [0, 1, 2, 3, 4]
+smoke:
+  n_train: 64
+  n_val: 64
+  epochs: 1
+  seeds: [0]
+  temperatures: [2]

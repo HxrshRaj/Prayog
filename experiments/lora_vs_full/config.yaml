@@ -1,0 +1,19 @@
+model: prajjwal1/bert-tiny
+dataset: glue/sst2
+n_train: 4000
+n_val: 872
+max_len: 64
+batch_size: 32
+epochs: 3
+seeds: [0, 1, 2, 3, 4]
+full_lr: 1.0e-4
+lora_lr: 1.0e-3
+lora_ranks: [1, 4, 16]
+lora_alpha_factor: 2        # alpha = factor * r
+lora_target: [query, value]
+smoke:
+  n_train: 64
+  n_val: 64
+  epochs: 1
+  seeds: [0]
+  lora_ranks: [4]

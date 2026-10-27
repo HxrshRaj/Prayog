@@ -1,0 +1,422 @@
+{
+  "experiment": "lora_vs_full",
+  "config": {
+    "model": "prajjwal1/bert-tiny",
+    "dataset": "glue/sst2",
+    "n_train": 4000,
+    "n_val": 872,
+    "max_len": 64,
+    "batch_size": 32,
+    "epochs": 3,
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ],
+    "full_lr": 0.0001,
+    "lora_lr": 0.001,
+    "lora_ranks": [
+      1,
+      4,
+      16
+    ],
+    "lora_alpha_factor": 2,
+    "lora_target": [
+      "query",
+      "value"
+    ]
+  },
+  "env": {
+    "git_commit": "unknown",
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26300-SP0",
+    "libraries": {
+      "torch": "2.14.1+cpu",
+      "transformers": "5.21.0",
+      "peft": "0.21.2",
+      "trl": "1.16.0",
+      "datasets": "5.1.0",
+      "stable-baselines3": "2.9.2",
+      "gymnasium": "1.4.0",
+      "numpy": "2.4.6",
+      "scikit-learn": "1.9.1",
+      "mlflow": "3.17.2"
+    },
+    "device": "cpu",
+    "timestamp": "2026-10-27T19:13:01"
+  },
+  "runs": [
+    {
+      "variant": "full_ft",
+      "seed": 0,
+      "metrics": {
+        "accuracy": 0.7683486342430115,
+        "train_time_s": 60.152997999990475,
+        "trainable_params": 4386178,
+        "total_params": 4386178,
+        "trainable_pct": 100.0,
+        "train_state_mb": 66.92776489257812
+      }
+    },
+    {
+      "variant": "lora_r1",
+      "seed": 0,
+      "metrics": {
+        "accuracy": 0.7259174585342407,
+        "train_time_s": 42.51462560000073,
+        "trainable_params": 1282,
+        "total_params": 4387460,
+        "trainable_pct": 0.02921963960925,
+        "train_state_mb": 16.751502990722656
+      }
+    },
+    {
+      "variant": "lora_r4",
+      "seed": 0,
+      "metrics": {
+        "accuracy": 0.7557339668273926,
+        "train_time_s": 39.873248100004275,
+        "trainable_params": 4354,
+        "total_params": 4390532,
+        "trainable_pct": 0.09916793682405686,
+        "train_state_mb": 16.798377990722656
+      }
+    },
+    {
+      "variant": "lora_r16",
+      "seed": 0,
+      "metrics": {
+        "accuracy": 0.71100914478302,
+        "train_time_s": 38.096217099999194,
+        "trainable_params": 16642,
+        "total_params": 4402820,
+        "trainable_pct": 0.37798501869256523,
+        "train_state_mb": 16.985877990722656
+      }
+    },
+    {
+      "variant": "full_ft",
+      "seed": 1,
+      "metrics": {
+        "accuracy": 0.7385321259498596,
+        "train_time_s": 58.44885159999831,
+        "trainable_params": 4386178,
+        "total_params": 4386178,
+        "trainable_pct": 100.0,
+        "train_state_mb": 66.92776489257812
+      }
+    },
+    {
+      "variant": "lora_r1",
+      "seed": 1,
+      "metrics": {
+        "accuracy": 0.732798159122467,
+        "train_time_s": 38.49837029998889,
+        "trainable_params": 1282,
+        "total_params": 4387460,
+        "trainable_pct": 0.02921963960925,
+        "train_state_mb": 16.751502990722656
+      }
+    },
+    {
+      "variant": "lora_r4",
+      "seed": 1,
+      "metrics": {
+        "accuracy": 0.6869266033172607,
+        "train_time_s": 37.35770370000682,
+        "trainable_params": 4354,
+        "total_params": 4390532,
+        "trainable_pct": 0.09916793682405686,
+        "train_state_mb": 16.798377990722656
+      }
+    },
+    {
+      "variant": "lora_r16",
+      "seed": 1,
+      "metrics": {
+        "accuracy": 0.7052752375602722,
+        "train_time_s": 40.7863623000012,
+        "trainable_params": 16642,
+        "total_params": 4402820,
+        "trainable_pct": 0.37798501869256523,
+        "train_state_mb": 16.985877990722656
+      }
+    },
+    {
+      "variant": "full_ft",
+      "seed": 2,
+      "metrics": {
+        "accuracy": 0.7763761281967163,
+        "train_time_s": 61.20335910000722,
+        "trainable_params": 4386178,
+        "total_params": 4386178,
+        "trainable_pct": 100.0,
+        "train_state_mb": 66.92776489257812
+      }
+    },
+    {
+      "variant": "lora_r1",
+      "seed": 2,
+      "metrics": {
+        "accuracy": 0.747706413269043,
+        "train_time_s": 36.891781600003014,
+        "trainable_params": 1282,
+        "total_params": 4387460,
+        "trainable_pct": 0.02921963960925,
+        "train_state_mb": 16.751502990722656
+      }
+    },
+    {
+      "variant": "lora_r4",
+      "seed": 2,
+      "metrics": {
+        "accuracy": 0.747706413269043,
+        "train_time_s": 33.096012599999085,
+        "trainable_params": 4354,
+        "total_params": 4390532,
+        "trainable_pct": 0.09916793682405686,
+        "train_state_mb": 16.798377990722656
+      }
+    },
+    {
+      "variant": "lora_r16",
+      "seed": 2,
+      "metrics": {
+        "accuracy": 0.7454128265380859,
+        "train_time_s": 35.949394099996425,
+        "trainable_params": 16642,
+        "total_params": 4402820,
+        "trainable_pct": 0.37798501869256523,
+        "train_state_mb": 16.985877990722656
+      }
+    },
+    {
+      "variant": "full_ft",
+      "seed": 3,
+      "metrics": {
+        "accuracy": 0.7821100950241089,
+        "train_time_s": 60.214028800008236,
+        "trainable_params": 4386178,
+        "total_params": 4386178,
+        "trainable_pct": 100.0,
+        "train_state_mb": 66.92776489257812
+      }
+    },
+    {
+      "variant": "lora_r1",
+      "seed": 3,
+      "metrics": {
+        "accuracy": 0.713302731513977,
+        "train_time_s": 38.814395699999295,
+        "trainable_params": 1282,
+        "total_params": 4387460,
+        "trainable_pct": 0.02921963960925,
+        "train_state_mb": 16.751502990722656
+      }
+    },
+    {
+      "variant": "lora_r4",
+      "seed": 3,
+      "metrics": {
+        "accuracy": 0.7350917458534241,
+        "train_time_s": 38.46539289999055,
+        "trainable_params": 4354,
+        "total_params": 4390532,
+        "trainable_pct": 0.09916793682405686,
+        "train_state_mb": 16.798377990722656
+      }
+    },
+    {
+      "variant": "lora_r16",
+      "seed": 3,
+      "metrics": {
+        "accuracy": 0.7511467933654785,
+        "train_time_s": 39.57885809999425,
+        "trainable_params": 16642,
+        "total_params": 4402820,
+        "trainable_pct": 0.37798501869256523,
+        "train_state_mb": 16.985877990722656
+      }
+    },
+    {
+      "variant": "full_ft",
+      "seed": 4,
+      "metrics": {
+        "accuracy": 0.7683486342430115,
+        "train_time_s": 62.90702820000297,
+        "trainable_params": 4386178,
+        "total_params": 4386178,
+        "trainable_pct": 100.0,
+        "train_state_mb": 66.92776489257812
+      }
+    },
+    {
+      "variant": "lora_r1",
+      "seed": 4,
+      "metrics": {
+        "accuracy": 0.7121559381484985,
+        "train_time_s": 37.043330100001185,
+        "trainable_params": 1282,
+        "total_params": 4387460,
+        "trainable_pct": 0.02921963960925,
+        "train_state_mb": 16.751502990722656
+      }
+    },
+    {
+      "variant": "lora_r4",
+      "seed": 4,
+      "metrics": {
+        "accuracy": 0.7408257126808167,
+        "train_time_s": 38.35711949999677,
+        "trainable_params": 4354,
+        "total_params": 4390532,
+        "trainable_pct": 0.09916793682405686,
+        "train_state_mb": 16.798377990722656
+      }
+    },
+    {
+      "variant": "lora_r16",
+      "seed": 4,
+      "metrics": {
+        "accuracy": 0.7247706651687622,
+        "train_time_s": 39.95425919999252,
+        "trainable_params": 16642,
+        "total_params": 4402820,
+        "trainable_pct": 0.37798501869256523,
+        "train_state_mb": 16.985877990722656
+      }
+    }
+  ],
+  "summary": {
+    "full_ft": {
+      "accuracy": {
+        "mean": 0.7667431235313416,
+        "std": 0.01680739647875013,
+        "n": 5
+      },
+      "train_time_s": {
+        "mean": 60.58525314000144,
+        "std": 1.6326020614219512,
+        "n": 5
+      },
+      "trainable_params": {
+        "mean": 4386178.0,
+        "std": 0.0,
+        "n": 5
+      },
+      "total_params": {
+        "mean": 4386178.0,
+        "std": 0.0,
+        "n": 5
+      },
+      "trainable_pct": {
+        "mean": 100.0,
+        "std": 0.0,
+        "n": 5
+      },
+      "train_state_mb": {
+        "mean": 66.92776489257812,
+        "std": 0.0,
+        "n": 5
+      }
+    },
+    "lora_r1": {
+      "accuracy": {
+        "mean": 0.7263761401176453,
+        "std": 0.014744163473797648,
+        "n": 5
+      },
+      "train_time_s": {
+        "mean": 38.752500659998624,
+        "std": 2.26966609457394,
+        "n": 5
+      },
+      "trainable_params": {
+        "mean": 1282.0,
+        "std": 0.0,
+        "n": 5
+      },
+      "total_params": {
+        "mean": 4387460.0,
+        "std": 0.0,
+        "n": 5
+      },
+      "trainable_pct": {
+        "mean": 0.029219639609249996,
+        "std": 3.878959614448864e-18,
+        "n": 5
+      },
+      "train_state_mb": {
+        "mean": 16.751502990722656,
+        "std": 0.0,
+        "n": 5
+      }
+    },
+    "lora_r4": {
+      "accuracy": {
+        "mean": 0.7332568883895874,
+        "std": 0.027023864186531528,
+        "n": 5
+      },
+      "train_time_s": {
+        "mean": 37.4298953599995,
+        "std": 2.5831049042969267,
+        "n": 5
+      },
+      "trainable_params": {
+        "mean": 4354.0,
+        "std": 0.0,
+        "n": 5
+      },
+      "total_params": {
+        "mean": 4390532.0,
+        "std": 0.0,
+        "n": 5
+      },
+      "trainable_pct": {
+        "mean": 0.09916793682405686,
+        "std": 0.0,
+        "n": 5
+      },
+      "train_state_mb": {
+        "mean": 16.798377990722656,
+        "std": 0.0,
+        "n": 5
+      }
+    },
+    "lora_r16": {
+      "accuracy": {
+        "mean": 0.7275229334831238,
+        "std": 0.02033085832694166,
+        "n": 5
+      },
+      "train_time_s": {
+        "mean": 38.87301815999672,
+        "std": 1.9025755922290113,
+        "n": 5
+      },
+      "trainable_params": {
+        "mean": 16642.0,
+        "std": 0.0,
+        "n": 5
+      },
+      "total_params": {
+        "mean": 4402820.0,
+        "std": 0.0,
+        "n": 5
+      },
+      "trainable_pct": {
+        "mean": 0.37798501869256523,
+        "std": 0.0,
+        "n": 5
+      },
+      "train_state_mb": {
+        "mean": 16.985877990722656,
+        "std": 0.0,
+        "n": 5
+      }
+    }
+  }
+}

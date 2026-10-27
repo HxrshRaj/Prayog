@@ -1,0 +1,24 @@
+model: EleutherAI/pythia-70m
+dataset: Anthropic/hh-rlhf (helpful-base, human preference labels)
+n_pairs: 600
+n_train: 400            # remaining pairs are the held-out set
+max_prompt_chars: 400
+max_reply_chars: 300
+min_reply_chars: 20
+max_length: 256
+judge: local            # local | watsonx (watsonx NOT run in this repo)
+judge_model: Qwen/Qwen2.5-0.5B-Instruct
+beta: 0.1
+lr: 1.0e-5
+batch_size: 4
+grad_accum: 2
+epochs: 1
+seeds: [0, 1, 2, 3, 4]
+gen_prompts: 40
+gen_new_tokens: 40
+smoke:
+  n_pairs: 12
+  n_train: 8
+  seeds: [0]
+  gen_prompts: 2
+  gen_new_tokens: 8

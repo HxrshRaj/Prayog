@@ -1,0 +1,318 @@
+{
+  "experiment": "distillation",
+  "config": {
+    "teacher": "distilbert-base-uncased-finetuned-sst-2-english",
+    "student": "prajjwal1/bert-tiny",
+    "student_tokenizer": "prajjwal1/bert-tiny",
+    "dataset": "glue/sst2",
+    "n_train": 1000,
+    "n_val": 872,
+    "max_len": 64,
+    "batch_size": 32,
+    "epochs": 6,
+    "lr": 0.001,
+    "alpha": 0.7,
+    "temperatures": [
+      1,
+      2,
+      4,
+      8
+    ],
+    "seeds": [
+      0,
+      1,
+      2,
+      3,
+      4
+    ]
+  },
+  "env": {
+    "git_commit": "unknown",
+    "python": "3.11.9",
+    "platform": "Windows-10-10.0.26300-SP0",
+    "libraries": {
+      "torch": "2.14.1+cpu",
+      "transformers": "5.21.0",
+      "peft": "0.21.2",
+      "trl": "1.16.0",
+      "datasets": "5.1.0",
+      "stable-baselines3": "2.9.2",
+      "gymnasium": "1.4.0",
+      "numpy": "2.4.6",
+      "scikit-learn": "1.9.1",
+      "mlflow": "3.17.2"
+    },
+    "device": "cpu",
+    "timestamp": "2026-10-27T19:30:36"
+  },
+  "runs": [
+    {
+      "variant": "student_alone",
+      "seed": 0,
+      "metrics": {
+        "accuracy": 0.6926605701446533,
+        "train_time_s": 50.05868170000031
+      }
+    },
+    {
+      "variant": "distilled_T1",
+      "seed": 0,
+      "metrics": {
+        "accuracy": 0.6961008906364441,
+        "train_time_s": 38.536708600004204
+      }
+    },
+    {
+      "variant": "distilled_T2",
+      "seed": 0,
+      "metrics": {
+        "accuracy": 0.661697268486023,
+        "train_time_s": 33.58999409999524
+      }
+    },
+    {
+      "variant": "distilled_T4",
+      "seed": 0,
+      "metrics": {
+        "accuracy": 0.7121559381484985,
+        "train_time_s": 41.12613119999878
+      }
+    },
+    {
+      "variant": "distilled_T8",
+      "seed": 0,
+      "metrics": {
+        "accuracy": 0.6880733966827393,
+        "train_time_s": 33.60098860001017
+      }
+    },
+    {
+      "variant": "student_alone",
+      "seed": 1,
+      "metrics": {
+        "accuracy": 0.6857798099517822,
+        "train_time_s": 53.74156239999866
+      }
+    },
+    {
+      "variant": "distilled_T1",
+      "seed": 1,
+      "metrics": {
+        "accuracy": 0.7018348574638367,
+        "train_time_s": 38.85050400000182
+      }
+    },
+    {
+      "variant": "distilled_T2",
+      "seed": 1,
+      "metrics": {
+        "accuracy": 0.7098624110221863,
+        "train_time_s": 42.51157699999749
+      }
+    },
+    {
+      "variant": "distilled_T4",
+      "seed": 1,
+      "metrics": {
+        "accuracy": 0.6880733966827393,
+        "train_time_s": 33.008142000006046
+      }
+    },
+    {
+      "variant": "distilled_T8",
+      "seed": 1,
+      "metrics": {
+        "accuracy": 0.7144495248794556,
+        "train_time_s": 52.35838869999861
+      }
+    },
+    {
+      "variant": "student_alone",
+      "seed": 2,
+      "metrics": {
+        "accuracy": 0.6949541568756104,
+        "train_time_s": 34.77682739999727
+      }
+    },
+    {
+      "variant": "distilled_T1",
+      "seed": 2,
+      "metrics": {
+        "accuracy": 0.7121559381484985,
+        "train_time_s": 34.81564519999665
+      }
+    },
+    {
+      "variant": "distilled_T2",
+      "seed": 2,
+      "metrics": {
+        "accuracy": 0.7178899049758911,
+        "train_time_s": 38.26928479998605
+      }
+    },
+    {
+      "variant": "distilled_T4",
+      "seed": 2,
+      "metrics": {
+        "accuracy": 0.6972476840019226,
+        "train_time_s": 52.240460800006986
+      }
+    },
+    {
+      "variant": "distilled_T8",
+      "seed": 2,
+      "metrics": {
+        "accuracy": 0.7121559381484985,
+        "train_time_s": 33.71857739999541
+      }
+    },
+    {
+      "variant": "student_alone",
+      "seed": 3,
+      "metrics": {
+        "accuracy": 0.6880733966827393,
+        "train_time_s": 34.80753320000076
+      }
+    },
+    {
+      "variant": "distilled_T1",
+      "seed": 3,
+      "metrics": {
+        "accuracy": 0.6892201900482178,
+        "train_time_s": 36.963073300008546
+      }
+    },
+    {
+      "variant": "distilled_T2",
+      "seed": 3,
+      "metrics": {
+        "accuracy": 0.6731651425361633,
+        "train_time_s": 48.22814309998648
+      }
+    },
+    {
+      "variant": "distilled_T4",
+      "seed": 3,
+      "metrics": {
+        "accuracy": 0.6456422209739685,
+        "train_time_s": 31.86619589998736
+      }
+    },
+    {
+      "variant": "distilled_T8",
+      "seed": 3,
+      "metrics": {
+        "accuracy": 0.7029816508293152,
+        "train_time_s": 31.941167299999506
+      }
+    },
+    {
+      "variant": "student_alone",
+      "seed": 4,
+      "metrics": {
+        "accuracy": 0.6869266033172607,
+        "train_time_s": 28.61978690000251
+      }
+    },
+    {
+      "variant": "distilled_T1",
+      "seed": 4,
+      "metrics": {
+        "accuracy": 0.7006880640983582,
+        "train_time_s": 39.56713709999167
+      }
+    },
+    {
+      "variant": "distilled_T2",
+      "seed": 4,
+      "metrics": {
+        "accuracy": 0.6880733966827393,
+        "train_time_s": 22.834289200007333
+      }
+    },
+    {
+      "variant": "distilled_T4",
+      "seed": 4,
+      "metrics": {
+        "accuracy": 0.7075688242912292,
+        "train_time_s": 24.755941800001892
+      }
+    },
+    {
+      "variant": "distilled_T8",
+      "seed": 4,
+      "metrics": {
+        "accuracy": 0.7236238718032837,
+        "train_time_s": 24.913283899993985
+      }
+    }
+  ],
+  "summary": {
+    "student_alone": {
+      "accuracy": {
+        "mean": 0.6896789073944092,
+        "std": 0.003939364577269458,
+        "n": 5
+      },
+      "train_time_s": {
+        "mean": 40.400878319999904,
+        "std": 10.873782590221493,
+        "n": 5
+      }
+    },
+    "distilled_T1": {
+      "accuracy": {
+        "mean": 0.699999988079071,
+        "std": 0.008411514768621798,
+        "n": 5
+      },
+      "train_time_s": {
+        "mean": 37.746613640000575,
+        "std": 1.8948377966067842,
+        "n": 5
+      }
+    },
+    "distilled_T2": {
+      "accuracy": {
+        "mean": 0.6901376247406006,
+        "std": 0.023772022976886208,
+        "n": 5
+      },
+      "train_time_s": {
+        "mean": 37.08665763999452,
+        "std": 9.6218204797533,
+        "n": 5
+      }
+    },
+    "distilled_T4": {
+      "accuracy": {
+        "mean": 0.6901376128196717,
+        "std": 0.026567403804434554,
+        "n": 5
+      },
+      "train_time_s": {
+        "mean": 36.59937434000021,
+        "std": 10.496451013476708,
+        "n": 5
+      }
+    },
+    "distilled_T8": {
+      "accuracy": {
+        "mean": 0.7082568764686584,
+        "std": 0.01346195550200576,
+        "n": 5
+      },
+      "train_time_s": {
+        "mean": 35.30648117999954,
+        "std": 10.192418513748182,
+        "n": 5
+      }
+    }
+  },
+  "teacher": {
+    "name": "distilbert-base-uncased-finetuned-sst-2-english",
+    "val_accuracy": 0.9105504751205444,
+    "params": 66955010
+  },
+  "student_params": 4386178
+}
