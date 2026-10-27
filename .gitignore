@@ -4,6 +4,7 @@ __pycache__/
 node_modules/
 frontend/dist/
 mlruns/
+mlflow.db
 *.smoke.json
 .pytest_cache/
 .env

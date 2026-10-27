@@ -83,9 +83,40 @@ SB3 PPO final return 500.0 ± 0.0; scratch PPO 495.6 ± 9.8 (max 500). Differenc
 
 What did not match the paper:
 - CartPole saturates at 500, so the final score cannot separate two good implementations; the learning curves (below) are the better comparison.
-- LunarLander was not run (Box2D is not installed on the development machine), so only CartPole is covered.
+- LunarLander is a separate card with a much smaller step budget than it needs; this card is CartPole only.
 - The paper's experiments are on MuJoCo/Atari; CartPole is a much easier problem.
 - Greedy evaluation is used for the final score; training curves use stochastic-policy episode returns.
+
+### PPO on LunarLander (small budget): **not reproduced**
+
+_Schulman et al. 2017, Proximal Policy Optimization Algorithms_
+
+SB3 -340.3 ± 102.4; scratch -357.4 ± 299.8 (greedy eval over 10 episodes). Difference 17.1; neither reaches 200.
+
+| variant | final eval return | train time (s) |
+|---|---|---|
+| sb3_ppo | -340.3 ± 102.4 | 348 ± 126 |
+| scratch_ppo | -357.4 ± 299.8 | 189 ± 27 |
+
+What did not match the paper:
+- The step budget is far below what PPO needs to solve LunarLander, so this tests parity, not final performance.
+- Only 3 seeds, and no hyper-parameter tuning.
+
+### Verifiable-reward RL (GRPO-style, toy): **partly reproduced**
+
+_Shao et al. 2024, DeepSeekMath (GRPO); DeepSeek-AI 2025, DeepSeek-R1_
+
+Greedy accuracy on training pairs 0.3% -> 30.2% ± 9.8; on held-out pairs 0.0% -> 2.0% ± 2.7.
+
+| variant | train-pair acc (end) | held-out-pair acc (end) | train-pair acc (start) | held-out acc (start) |
+|---|---|---|---|---|
+| grpo | 0.302 ± 0.098 | 0.020 ± 0.027 | 0.003 ± 0.006 | 0.000 ± 0.000 |
+
+What did not match the paper:
+- A toy task and a from-scratch GRU, not a pretrained LLM: this shows the mechanism, not reasoning emergence.
+- No clipping or KL term: updates are exactly on-policy (one step per batch), unlike full GRPO.
+- The paper's gains come from large pretrained models; no 'aha' behaviour can appear here.
+- Held-out generalisation is weak, so the learned policy is largely a lookup of seen pairs.
 
 <!-- /RESULTS -->
 
@@ -93,7 +124,7 @@ What did not match the paper:
 
 ```
 experiments/<name>/   config.yaml  run.py  results.json  card.json (repro card)
-  lora_vs_full/  distillation/  dpo/  rl_ppo/  grpo/ (optional, not implemented)
+  lora_vs_full/  distillation/  dpo/  rl_ppo/  rl_ppo_lunarlander/  grpo/
 prayog/               seeding, provenance (git commit, library versions), result files, judges
 backend/              FastAPI: registry, curves, MLflow view, /api/predict, serves the built dashboard
 frontend/             React dashboard: papers, runs, compare, repro cards, try-it box
@@ -146,6 +177,8 @@ without needing a hard KL constraint.
   scale, not whether the paper's headline numbers hold.
 - The weights of the AI judge (Qwen2.5-0.5B-Instruct) are small; its labels are noisy. watsonx.ai Granite judge: adapter
   written in `prayog/judge.py`, **not run** (no key).
-- LunarLander and the GRPO-style experiment were **not run**.
+- LunarLander uses a small step budget (see its card); the GRPO-style experiment is a toy GRU task, not an LLM.
+- Runs were produced before the repo's first commit, so saved provenance shows `git_commit: unknown`; library versions are recorded.
+- `docker compose` (MLflow service) was not run; the API/dashboard image was built and tested. MLflow data lives in `mlflow.db` (SQLite, backfilled by `scripts/log_mlflow.py`).
 - GPU parts (Triton kernels, NCCL/DDP) are **not run**; there is no GPU on the dev machine and no GPU numbers are claimed.
 - Live deployment is not part of this repo's history; see "Deploy".

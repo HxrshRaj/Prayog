@@ -1,10 +1,35 @@
 {
-  "title": "Verifiable-reward RL (GRPO-style)",
-  "paper": "Shao et al. 2024, DeepSeekMath (GRPO)",
-  "claim": "Group-relative advantages with a verifiable reward can train reasoning without a value network.",
-  "setup": "Optional experiment, not implemented.",
-  "result": "Not run.",
-  "verdict": "not run",
-  "verdict_reason": "Optional item skipped; nothing was run.",
-  "mismatches": []
+  "title": "Verifiable-reward RL (GRPO-style, toy)",
+  "paper": "Shao et al. 2024, DeepSeekMath (GRPO); DeepSeek-AI 2025, DeepSeek-R1",
+  "claim": "A policy can be improved with a rule-checkable reward and group-relative advantages (reward minus the group mean, divided by the group std), with no value network and no reward model.",
+  "setup": "A GRU encoder-decoder trained from scratch (no pretraining) on single-digit addition. Per step 32 prompts x 16 samples, reward 1 iff the answer is exactly right, 400 on-policy steps, lr 0.003, 5 seeds. 20 of 100 (a, b) pairs are held out and never trained on.",
+  "result": "Greedy accuracy on training pairs 0.3% -> 30.2% \u00b1 9.8; on held-out pairs 0.0% -> 2.0% \u00b1 2.7.",
+  "verdict": "partly reproduced",
+  "verdict_reason": "Training accuracy rises by 30.0 points (3.1x seed std), so the mechanism learns from a verifiable reward alone. Held-out gain is 2.0 points: it mostly memorises training pairs rather than learning addition.",
+  "mismatches": [
+    "A toy task and a from-scratch GRU, not a pretrained LLM: this shows the mechanism, not reasoning emergence.",
+    "No clipping or KL term: updates are exactly on-policy (one step per batch), unlike full GRPO.",
+    "The paper's gains come from large pretrained models; no 'aha' behaviour can appear here.",
+    "Held-out generalisation is weak, so the learned policy is largely a lookup of seen pairs."
+  ],
+  "metrics": [
+    {
+      "metric": "train_acc",
+      "label": "train-pair acc (end)",
+      "chart": true
+    },
+    {
+      "metric": "heldout_acc",
+      "label": "held-out-pair acc (end)",
+      "chart": true
+    },
+    {
+      "metric": "train_acc_start",
+      "label": "train-pair acc (start)"
+    },
+    {
+      "metric": "heldout_acc_start",
+      "label": "held-out acc (start)"
+    }
+  ]
 }

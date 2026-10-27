@@ -101,10 +101,10 @@ def mlflow_runs():
     try:
         import mlflow
         from mlflow.tracking import MlflowClient
-        store = ROOT / "mlruns"
+        store = ROOT / "mlflow.db"
         if not store.exists():
             return []
-        client = MlflowClient(tracking_uri=store.as_uri())
+        client = MlflowClient(tracking_uri=f"sqlite:///{store.as_posix()}")
         rows = []
         for exp in client.search_experiments():
             for r in client.search_runs([exp.experiment_id], max_results=500):

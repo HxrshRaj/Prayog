@@ -6,7 +6,7 @@ trl
 datasets
 accelerate
 stable-baselines3
-gymnasium
+gymnasium[box2d]
 mlflow
 fastapi
 uvicorn[standard]

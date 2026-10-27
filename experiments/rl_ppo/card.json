@@ -8,7 +8,7 @@
   "verdict_reason": "Both means are at least 475 of 500 and differ by 4.4 (0.9% of the maximum return); the rule is: within 5% and both solved.",
   "mismatches": [
     "CartPole saturates at 500, so the final score cannot separate two good implementations; the learning curves (below) are the better comparison.",
-    "LunarLander was not run (Box2D is not installed on the development machine), so only CartPole is covered.",
+    "LunarLander is a separate card with a much smaller step budget than it needs; this card is CartPole only.",
     "The paper's experiments are on MuJoCo/Atari; CartPole is a much easier problem.",
     "Greedy evaluation is used for the final score; training curves use stochastic-policy episode returns."
   ],

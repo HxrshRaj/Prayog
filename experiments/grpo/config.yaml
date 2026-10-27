@@ -1,0 +1,14 @@
+task: single-digit addition a+b (answer written as digits), reward 1 iff the decoded answer is exactly right
+max_operand: 9
+holdout_frac: 0.2      # (a, b) pairs never seen in training
+steps: 400
+prompts_per_step: 32
+group_size: 16
+lr: 3.0e-3
+hidden: 128
+max_answer_tokens: 3
+seeds: [0, 1, 2, 3, 4]
+curve_every: 20
+smoke:
+  steps: 3
+  seeds: [0]

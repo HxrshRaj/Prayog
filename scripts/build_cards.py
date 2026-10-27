@@ -197,7 +197,7 @@ def rl():
         "mismatches": [
             "CartPole saturates at 500, so the final score cannot separate two good implementations; the learning "
             "curves (below) are the better comparison.",
-            "LunarLander was not run (Box2D is not installed on the development machine), so only CartPole is covered.",
+            "LunarLander is a separate card with a much smaller step budget than it needs; this card is CartPole only.",
             "The paper's experiments are on MuJoCo/Atari; CartPole is a much easier problem.",
             "Greedy evaluation is used for the final score; training curves use stochastic-policy episode returns.",
         ],
@@ -208,10 +208,74 @@ def rl():
 
 
 def grpo():
-    return {"title": "Verifiable-reward RL (GRPO-style)", "paper": "Shao et al. 2024, DeepSeekMath (GRPO)",
-            "claim": "Group-relative advantages with a verifiable reward can train reasoning without a value network.",
-            "setup": "Optional experiment, not implemented.", "result": "Not run.", "verdict": "not run",
-            "verdict_reason": "Optional item skipped; nothing was run.", "mismatches": []}
+    r = load("grpo")
+    if not r:
+        return {"title": "Verifiable-reward RL (GRPO-style)", "paper": "Shao et al. 2024, DeepSeekMath (GRPO)",
+                "claim": "-", "setup": "-", "result": "Not run.", "verdict": "not run",
+                "verdict_reason": "No saved results.", "mismatches": []}
+    s, c = r["summary"]["grpo"], r["config"]
+    gain = s["train_acc"]["mean"] - s["train_acc_start"]["mean"]
+    held_gain = s["heldout_acc"]["mean"] - s["heldout_acc_start"]["mean"]
+    verdict = verdict_gain(gain, s["train_acc"]["std"])
+    if verdict == "reproduced" and held_gain <= 2 * s["heldout_acc"]["std"]:
+        verdict = "partly reproduced"
+    return {
+        "title": "Verifiable-reward RL (GRPO-style, toy)",
+        "paper": "Shao et al. 2024, DeepSeekMath (GRPO); DeepSeek-AI 2025, DeepSeek-R1",
+        "claim": "A policy can be improved with a rule-checkable reward and group-relative advantages "
+                 "(reward minus the group mean, divided by the group std), with no value network and no reward model.",
+        "setup": f"A GRU encoder-decoder trained from scratch (no pretraining) on single-digit addition. Per step "
+                 f"{c['prompts_per_step']} prompts x {c['group_size']} samples, reward 1 iff the answer is exactly right, "
+                 f"{c['steps']} on-policy steps, lr {c['lr']}, {len(c['seeds'])} seeds. "
+                 f"{r['runs'][0]['metrics']['n_heldout_pairs']} of 100 (a, b) pairs are held out and never trained on.",
+        "result": f"Greedy accuracy on training pairs {s['train_acc_start']['mean'] * 100:.1f}% -> "
+                 f"{s['train_acc']['mean'] * 100:.1f}% ± {s['train_acc']['std'] * 100:.1f}; on held-out pairs "
+                 f"{s['heldout_acc_start']['mean'] * 100:.1f}% -> {s['heldout_acc']['mean'] * 100:.1f}% ± "
+                 f"{s['heldout_acc']['std'] * 100:.1f}.",
+        "verdict": verdict,
+        "verdict_reason": f"Training accuracy rises by {gain * 100:.1f} points ({gain / max(s['train_acc']['std'], 1e-9):.1f}x seed std), so the "
+                          f"mechanism learns from a verifiable reward alone. Held-out gain is {held_gain * 100:.1f} points: "
+                          f"it mostly memorises training pairs rather than learning addition.",
+        "mismatches": [
+            "A toy task and a from-scratch GRU, not a pretrained LLM: this shows the mechanism, not reasoning emergence.",
+            "No clipping or KL term: updates are exactly on-policy (one step per batch), unlike full GRPO.",
+            "The paper's gains come from large pretrained models; no 'aha' behaviour can appear here.",
+            "Held-out generalisation is weak, so the learned policy is largely a lookup of seen pairs.",
+        ],
+        "metrics": [{"metric": "train_acc", "label": "train-pair acc (end)", "chart": True},
+                    {"metric": "heldout_acc", "label": "held-out-pair acc (end)", "chart": True},
+                    {"metric": "train_acc_start", "label": "train-pair acc (start)"},
+                    {"metric": "heldout_acc_start", "label": "held-out acc (start)"}],
+    }
+
+
+def rl_lunar():
+    r = load("rl_ppo_lunarlander")
+    s, c = r["summary"], r["config"]
+    a, b = s["sb3_ppo"]["eval_return"], s["scratch_ppo"]["eval_return"]
+    diff = abs(a["mean"] - b["mean"])
+    solved = min(a["mean"], b["mean"]) >= 200
+    spread = max(a["std"], b["std"])
+    verdict = "reproduced" if solved and diff <= max(2 * spread, 20) else "not reproduced"
+    return {
+        "title": "PPO on LunarLander (small budget)",
+        "paper": "Schulman et al. 2017, Proximal Policy Optimization Algorithms",
+        "claim": "PPO learns a harder control task, and the from-scratch version matches the library.",
+        "setup": f"{c['env']}, only {c['total_timesteps']} steps, {len(c['seeds'])} seeds, same hyper-parameters for SB3 and "
+                 f"scratch PPO. Return of 200 counts as solved; that normally needs several times this budget.",
+        "result": f"SB3 {a['mean']:.1f} ± {a['std']:.1f}; scratch {b['mean']:.1f} ± {b['std']:.1f} (greedy eval over "
+                 f"{c['eval_episodes']} episodes). Difference {diff:.1f}; {'solved' if solved else 'neither reaches 200'}.",
+        "verdict": verdict,
+        "verdict_reason": f"Implementations are {'within' if diff <= max(2 * spread, 20) else 'not within'} noise of each "
+                          f"other (rule: gap <= max(2 std, 20)); verdict is 'not reproduced' unless both reach 200, because the claim includes actually learning the task.",
+        "mismatches": [
+            "The step budget is far below what PPO needs to solve LunarLander, so this tests parity, not final performance.",
+            "Only 3 seeds, and no hyper-parameter tuning.",
+        ],
+        "metrics": [{"metric": "eval_return", "label": "final eval return", "digits": 1, "chart": True},
+                    {"metric": "train_time_s", "label": "train time (s)", "digits": 0}],
+        "compare": [{"label": "SB3 vs scratch", "metric": "eval_return", "a": "sb3_ppo", "b": "scratch_ppo", "digits": 1}],
+    }
 
 
 def readme_block(names):
@@ -247,12 +311,12 @@ def update_readme(names):
 
 if __name__ == "__main__":
     for name, fn in [("lora_vs_full", lora), ("distillation", distillation), ("dpo", dpo),
-                     ("rl_ppo", rl), ("grpo", grpo)]:
-        if name != "grpo" and name != "dpo" and not load(name):
+                     ("rl_ppo", rl), ("rl_ppo_lunarlander", rl_lunar), ("grpo", grpo)]:
+        if not load(name):
             print("skip", name)
             continue
         (EXP / name).mkdir(exist_ok=True)
         (EXP / name / "card.json").write_text(json.dumps(fn(), indent=2))
         print("card", name)
 
-    update_readme(["lora_vs_full", "distillation", "dpo", "rl_ppo"])
+    update_readme(["lora_vs_full", "distillation", "dpo", "rl_ppo", "rl_ppo_lunarlander", "grpo"])

@@ -1,0 +1,35 @@
+{
+  "title": "PPO on LunarLander (small budget)",
+  "paper": "Schulman et al. 2017, Proximal Policy Optimization Algorithms",
+  "claim": "PPO learns a harder control task, and the from-scratch version matches the library.",
+  "setup": "LunarLander-v3, only 100000 steps, 3 seeds, same hyper-parameters for SB3 and scratch PPO. Return of 200 counts as solved; that normally needs several times this budget.",
+  "result": "SB3 -340.3 \u00b1 102.4; scratch -357.4 \u00b1 299.8 (greedy eval over 10 episodes). Difference 17.1; neither reaches 200.",
+  "verdict": "not reproduced",
+  "verdict_reason": "Implementations are within noise of each other (rule: gap <= max(2 std, 20)); verdict is 'not reproduced' unless both reach 200, because the claim includes actually learning the task.",
+  "mismatches": [
+    "The step budget is far below what PPO needs to solve LunarLander, so this tests parity, not final performance.",
+    "Only 3 seeds, and no hyper-parameter tuning."
+  ],
+  "metrics": [
+    {
+      "metric": "eval_return",
+      "label": "final eval return",
+      "digits": 1,
+      "chart": true
+    },
+    {
+      "metric": "train_time_s",
+      "label": "train time (s)",
+      "digits": 0
+    }
+  ],
+  "compare": [
+    {
+      "label": "SB3 vs scratch",
+      "metric": "eval_return",
+      "a": "sb3_ppo",
+      "b": "scratch_ppo",
+      "digits": 1
+    }
+  ]
+}

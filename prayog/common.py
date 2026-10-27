@@ -91,10 +91,10 @@ def load_config(exp_dir: Path, smoke: bool) -> dict:
 
 
 def log_mlflow(exp_name: str, runs: list[dict]) -> None:
-    """Best-effort MLflow logging (file store under ./mlruns)."""
+    """Best-effort MLflow logging (SQLite store at ./mlflow.db)."""
     try:
         import mlflow
-        mlflow.set_tracking_uri((ROOT / "mlruns").as_uri())
+        mlflow.set_tracking_uri(f"sqlite:///{(ROOT / 'mlflow.db').as_posix()}")
         mlflow.set_experiment(exp_name)
         for r in runs:
             with mlflow.start_run(run_name=f"{r['variant']}-seed{r['seed']}"):

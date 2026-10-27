@@ -5,6 +5,6 @@ services:
     # open http://localhost:8000 (dashboard + API on one port)
   mlflow:
     image: ghcr.io/mlflow/mlflow:v2.17.2
-    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri /mlruns
-    volumes: ["./mlruns:/mlruns"]
+    command: mlflow server --host 0.0.0.0 --port 5000 --backend-store-uri sqlite:////data/mlflow.db
+    volumes: ["./mlflow.db:/data/mlflow.db"]
     ports: ["5000:5000"]

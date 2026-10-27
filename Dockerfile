@@ -17,6 +17,6 @@ COPY models/ models/
 COPY --from=web /web/dist frontend/dist
 ENV HF_HOME=/app/hf_cache
 # Pre-download the 17 MB base model so the first /predict is fast
-RUN python -c "from transformers import AutoModelForSequenceClassification as M, AutoTokenizer as T; T.from_pretrained('prajjwal1/bert-tiny'); M.from_pretrained('prajjwal1/bert-tiny', num_labels=2)"
+RUN python -c "from transformers import BertForSequenceClassification as M, BertTokenizerFast as T; T.from_pretrained('prajjwal1/bert-tiny'); M.from_pretrained('prajjwal1/bert-tiny', num_labels=2)"
 ENV PORT=8000
 CMD ["sh", "-c", "uvicorn app.main:app --app-dir backend --host 0.0.0.0 --port ${PORT}"]
