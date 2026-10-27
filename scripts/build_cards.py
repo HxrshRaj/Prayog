@@ -142,11 +142,13 @@ def dpo():
                  f"{ms(s, 'dpo_judge_labels', 'heldout_reward_acc', 1, True)}%. Rule-based quality pass rate: untrained "
                  f"{s['untrained']['rule_pass_rate']['mean'] * 100:.0f}%, human {h['rule_pass_rate']['mean'] * 100:.0f}%, "
                  f"judge {j['rule_pass_rate']['mean'] * 100:.0f}%. The judge agrees with human labels on "
-                 f"{js['agreement_with_human'] * 100:.1f}% of {js['n_pairs']} pairs (chance = 50%); it gave the same "
-                 f"verdict in both answer orders for {js['position_consistent_fraction'] * 100:.0f}% of pairs, and agrees "
-                 f"{js['agreement_when_consistent'] * 100:.1f}% on those.",
-        "verdict": verdict_gain(gain, spread),
-        "verdict_reason": f"DPO on human labels moves held-out preference accuracy by {gain * 100:+.1f} points vs the "
+                 f"{js['agreement_with_human'] * 100:.1f}% of {js['n_pairs']} pairs (chance = 50%); the "
+                 f"agreement figure uses the order-debiased score (A-B logit gap averaged over both answer orders); the judge "
+                 f"picked the same underlying reply in both orders for only {js['position_consistent_fraction'] * 100:.0f}% of "
+                 f"pairs ({js['n_consistent']} of {js['n_pairs']}), i.e. it is dominated by position bias.",
+        # seed spread understates uncertainty here: 200 held-out pairs have a binomial SE of about 3.5 points
+        "verdict": "partly reproduced" if verdict_gain(gain, spread) == "reproduced" else verdict_gain(gain, spread),
+        "verdict_reason": f"Capped at 'partly': the held-out set is small (binomial SE about 3.5 points) and the judge-label arm is not better than human labels. DPO on human labels moves held-out preference accuracy by {gain * 100:+.1f} points vs the "
                           f"untrained model (seed std {spread * 100:.1f}). This is tiny scale: 70M parameters, "
                           f"{r['config']['n_train']} pairs.",
         "mismatches": [

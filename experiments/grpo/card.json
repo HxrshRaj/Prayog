@@ -1,0 +1,10 @@
+{
+  "title": "Verifiable-reward RL (GRPO-style)",
+  "paper": "Shao et al. 2024, DeepSeekMath (GRPO)",
+  "claim": "Group-relative advantages with a verifiable reward can train reasoning without a value network.",
+  "setup": "Optional experiment, not implemented.",
+  "result": "Not run.",
+  "verdict": "not run",
+  "verdict_reason": "Optional item skipped; nothing was run.",
+  "mismatches": []
+}

@@ -1,0 +1,53 @@
+{
+  "title": "Knowledge distillation",
+  "paper": "Hinton, Vinyals, Dean 2015, Distilling the Knowledge in a Neural Network",
+  "claim": "A small student trained on a teacher's softened outputs generalises better than the same student trained on hard labels alone, and a temperature above 1 helps expose the teacher's 'dark knowledge'.",
+  "setup": "Teacher distilbert-base-uncased-finetuned-sst-2-english (67M params, 91.1% val accuracy; it was trained by its authors on full SST-2). Student prajjwal1/bert-tiny (4.4M). Both student arms see the same 1000 labelled sentences and the same number of steps; loss = 0.3*CE + 0.7*T^2*KL. Temperatures [1, 2, 4, 8], 5 seeds.",
+  "result": "Student alone 68.97 \u00b1 0.39% vs distilled: T=1 70.00 \u00b1 0.84%; T=2 69.01 \u00b1 2.38%; T=4 69.01 \u00b1 2.66%; T=8 70.83 \u00b1 1.35%. Best is distilled_T8 (+1.86 points over student alone; seed std up to 1.35).",
+  "verdict": "partly reproduced",
+  "verdict_reason": "The best temperature beats the student alone by 1.86 points, which is 1.4x the seed spread. The temperature effect is not monotonic.",
+  "mismatches": [
+    "The gains are small and mostly within seed noise; the paper reports clear gains on larger problems.",
+    "The student stays far below the teacher; bert-tiny with 1000 labelled examples is capacity/data limited.",
+    "The teacher was trained on the full SST-2 train set, which includes our 1000-sentence subset.",
+    "We did not use a separate unlabelled transfer set, so distillation sees no extra inputs."
+  ],
+  "metrics": [
+    {
+      "metric": "accuracy",
+      "label": "val accuracy",
+      "chart": true,
+      "digits": 4
+    }
+  ],
+  "compare": [
+    {
+      "label": "distilled T=1 vs alone",
+      "metric": "accuracy",
+      "a": "distilled_T1",
+      "b": "student_alone",
+      "digits": 4
+    },
+    {
+      "label": "distilled T=2 vs alone",
+      "metric": "accuracy",
+      "a": "distilled_T2",
+      "b": "student_alone",
+      "digits": 4
+    },
+    {
+      "label": "distilled T=4 vs alone",
+      "metric": "accuracy",
+      "a": "distilled_T4",
+      "b": "student_alone",
+      "digits": 4
+    },
+    {
+      "label": "distilled T=8 vs alone",
+      "metric": "accuracy",
+      "a": "distilled_T8",
+      "b": "student_alone",
+      "digits": 4
+    }
+  ]
+}

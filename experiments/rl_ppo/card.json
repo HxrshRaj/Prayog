@@ -1,0 +1,37 @@
+{
+  "title": "PPO: library vs from-scratch",
+  "paper": "Schulman et al. 2017, Proximal Policy Optimization Algorithms",
+  "claim": "The clipped surrogate objective with GAE gives stable policy-gradient learning, and a faithful from-scratch implementation behaves like the library one.",
+  "setup": "CartPole-v1, 50000 steps, 5 seeds, identical hyper-parameters for Stable-Baselines3 and our PyTorch PPO (n_steps=256, batch=64, epochs=10, gamma=0.99, lambda=0.95, clip=0.2). Final score = mean return over 20 greedy episodes on held-out env seeds.",
+  "result": "SB3 PPO final return 500.0 \u00b1 0.0; scratch PPO 495.6 \u00b1 9.8 (max 500). Difference 4.4. Training took 81s vs 74s per run.",
+  "verdict": "reproduced",
+  "verdict_reason": "Both means are at least 475 of 500 and differ by 4.4 (0.9% of the maximum return); the rule is: within 5% and both solved.",
+  "mismatches": [
+    "CartPole saturates at 500, so the final score cannot separate two good implementations; the learning curves (below) are the better comparison.",
+    "LunarLander was not run (Box2D is not installed on the development machine), so only CartPole is covered.",
+    "The paper's experiments are on MuJoCo/Atari; CartPole is a much easier problem.",
+    "Greedy evaluation is used for the final score; training curves use stochastic-policy episode returns."
+  ],
+  "metrics": [
+    {
+      "metric": "eval_return",
+      "label": "final eval return",
+      "digits": 1,
+      "chart": true
+    },
+    {
+      "metric": "train_time_s",
+      "label": "train time (s)",
+      "digits": 0
+    }
+  ],
+  "compare": [
+    {
+      "label": "SB3 vs scratch",
+      "metric": "eval_return",
+      "a": "sb3_ppo",
+      "b": "scratch_ppo",
+      "digits": 1
+    }
+  ]
+}

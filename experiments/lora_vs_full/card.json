@@ -1,0 +1,58 @@
+{
+  "title": "LoRA vs full fine-tuning",
+  "paper": "Hu et al. 2021, LoRA: Low-Rank Adaptation of Large Language Models",
+  "claim": "Training only low-rank adapters (a tiny fraction of the weights) matches full fine-tuning quality, and very low ranks are already enough.",
+  "setup": "prajjwal1/bert-tiny on a 4000-sentence SST-2 subset, evaluated on 872 validation sentences. 3 epochs, 5 seeds. LoRA on query/value, ranks [1, 4, 16]; learning rates 0.0001 (full) and 0.001 (LoRA), not tuned beyond that.",
+  "result": "Full FT accuracy 0.767 \u00b1 0.017 with 100% trainable parameters. lora_r1 0.726 \u00b1 0.015 (0.03% trainable); lora_r4 0.733 \u00b1 0.027 (0.10% trainable); lora_r16 0.728 \u00b1 0.020 (0.38% trainable). Best LoRA (lora_r4) is 3.3 accuracy points below full FT (seed std up to 2.7 points). Training took 61s (full) vs 37s (LoRA r=4), 1.6x faster; analytic training-state memory 66.9 MB vs 16.8 MB.",
+  "verdict": "partly reproduced",
+  "verdict_reason": "LoRA gets within 3.3 points of full FT using under 0.4% of the parameters, but the gap is larger than the seed-to-seed spread, so parity is not shown at this scale.",
+  "mismatches": [
+    "The paper reports parity with full FT on large models; here a gap remains on a 4.4M-parameter model.",
+    "Accuracy does not increase with rank (r=1, 4, 16 are within noise of each other), which agrees with the paper's 'low rank suffices' point but means we cannot show a rank trend.",
+    "Memory is an analytic estimate (weights + gradients + Adam states), not measured peak memory; activations are excluded.",
+    "Learning rates were set once, not swept; the LoRA/full gap may shrink with tuning."
+  ],
+  "metrics": [
+    {
+      "metric": "accuracy",
+      "label": "val accuracy",
+      "chart": true
+    },
+    {
+      "metric": "trainable_pct",
+      "label": "trainable %",
+      "digits": 3
+    },
+    {
+      "metric": "train_time_s",
+      "label": "train time (s)",
+      "digits": 1,
+      "chart": true
+    },
+    {
+      "metric": "train_state_mb",
+      "label": "state memory (MB)",
+      "digits": 1
+    }
+  ],
+  "compare": [
+    {
+      "label": "full FT vs lora_r1",
+      "metric": "accuracy",
+      "a": "full_ft",
+      "b": "lora_r1"
+    },
+    {
+      "label": "full FT vs lora_r4",
+      "metric": "accuracy",
+      "a": "full_ft",
+      "b": "lora_r4"
+    },
+    {
+      "label": "full FT vs lora_r16",
+      "metric": "accuracy",
+      "a": "full_ft",
+      "b": "lora_r16"
+    }
+  ]
+}

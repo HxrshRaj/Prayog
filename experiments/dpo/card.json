@@ -1,0 +1,47 @@
+{
+  "title": "Preference optimisation (DPO) and AI-judge labels",
+  "paper": "Rafailov et al. 2023, Direct Preference Optimization; Bai et al. 2022 (RLAIF)",
+  "claim": "DPO on preference pairs raises the model's preference for the chosen response without a separate reward model, and AI-judge labels can replace human labels.",
+  "setup": "EleutherAI/pythia-70m fine-tuned with trl DPOTrainer (beta=0.1, lr=1e-05, 1 epoch) on 400 short Anthropic HH helpful-base pairs, evaluated on 200 held-out pairs, 3 seeds. AI labels come from Qwen/Qwen2.5-0.5B-Instruct (local, both answer orders scored). watsonx.ai Granite judge: not run (no key).",
+  "result": "Held-out pairs where the model ranks the human-chosen reply higher (length-normalised log-likelihood): untrained 49.0%, DPO on human labels 54.7 \u00b1 0.8%, DPO on judge labels 56.2 \u00b1 1.8%. DPO implicit-reward accuracy: human 59.2 \u00b1 2.5%, judge 55.8 \u00b1 3.8%. Rule-based quality pass rate: untrained 10%, human 15%, judge 12%. The judge agrees with human labels on 58.3% of 600 pairs (chance = 50%); the agreement figure uses the order-debiased score (A-B logit gap averaged over both answer orders); the judge picked the same underlying reply in both orders for only 0% of pairs (0 of 600), i.e. it is dominated by position bias.",
+  "verdict": "partly reproduced",
+  "verdict_reason": "Capped at 'partly': the held-out set is small (binomial SE about 3.5 points) and the judge-label arm is not better than human labels. DPO on human labels moves held-out preference accuracy by +5.7 points vs the untrained model (seed std 0.8). This is tiny scale: 70M parameters, 400 pairs.",
+  "mismatches": [
+    "pythia-70m is a base model, not instruction-tuned, so 'better responses' cannot be judged by humans or meaningfully by a rule; the rule check only catches degenerate or role-leaking output.",
+    "The 0.5B local judge is weak; its agreement with humans should be read against the 50% chance level.",
+    "Preference accuracy on held-out pairs is a proxy; we did not run a win-rate evaluation.",
+    "The untrained model's implicit-reward accuracy is 0 by construction (policy equals reference).",
+    "IBM watsonx.ai Granite judge adapter exists in prayog/judge.py but was not run."
+  ],
+  "metrics": [
+    {
+      "metric": "heldout_logp_acc",
+      "label": "held-out pref acc (logp)",
+      "chart": true
+    },
+    {
+      "metric": "heldout_reward_acc",
+      "label": "held-out pref acc (DPO reward)",
+      "chart": true
+    },
+    {
+      "metric": "rule_pass_rate",
+      "label": "rule pass rate",
+      "digits": 2
+    }
+  ],
+  "compare": [
+    {
+      "label": "DPO human labels vs untrained",
+      "metric": "heldout_logp_acc",
+      "a": "dpo_human_labels",
+      "b": "untrained"
+    },
+    {
+      "label": "human labels vs judge labels",
+      "metric": "heldout_logp_acc",
+      "a": "dpo_human_labels",
+      "b": "dpo_judge_labels"
+    }
+  ]
+}

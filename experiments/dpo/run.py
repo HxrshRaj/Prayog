@@ -107,7 +107,7 @@ def train_arm(cfg, seed, train_pairs, tok):
     args = DPOConfig(output_dir=tempfile.mkdtemp(), per_device_train_batch_size=cfg["batch_size"],
                      gradient_accumulation_steps=cfg["grad_accum"], num_train_epochs=cfg["epochs"],
                      learning_rate=cfg["lr"], beta=cfg["beta"], max_length=cfg["max_length"], seed=seed,
-                     use_cpu=True, report_to=[], save_strategy="no", logging_steps=10_000,
+                     use_cpu=True, bf16=False, fp16=False, report_to=[], save_strategy="no", logging_steps=10_000,
                      disable_tqdm=True)
     trainer = DPOTrainer(model=model, args=args, train_dataset=Dataset.from_list(train_pairs),
                          processing_class=tok)

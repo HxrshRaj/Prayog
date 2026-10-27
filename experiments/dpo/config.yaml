@@ -13,7 +13,7 @@ lr: 1.0e-5
 batch_size: 4
 grad_accum: 2
 epochs: 1
-seeds: [0, 1, 2, 3, 4]
+seeds: [0, 1, 2]
 gen_prompts: 40
 gen_new_tokens: 40
 smoke:
